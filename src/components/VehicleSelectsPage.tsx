@@ -1,3 +1,5 @@
+"use client";
+
 import { vehiclesService } from "@/services/vehicles";
 import { ChangeEvent, useState, useEffect } from "react";
 
@@ -6,7 +8,7 @@ interface Vehicle {
   MakeId: number;
 }
 
-const getYears = (): number[] => {
+export const getYears = (): number[] => {
   const startYear = 2015;
   const currentYear = new Date().getFullYear();
   const years = [];
@@ -18,9 +20,20 @@ const getYears = (): number[] => {
   return years;
 };
 
+const loadData = async () => {
+  const data = await vehiclesService.getAll();
+  const vehicleList = data.Results.map((vehicle: Vehicle) => ({
+    MakeId: vehicle.MakeId,
+    MakeName: vehicle.MakeName,
+  }));
+
+  return vehicleList;
+};
+
 export function VehicleSelects() {
   const [formData, setFormData] = useState({ makeId: "", year: "" });
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const isFormValid = formData.makeId && formData.year;
   const years = getYears();
 
   const handleInput = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -37,26 +50,22 @@ export function VehicleSelects() {
     console.log(formData);
   };
 
-  const isFormValid = formData.makeId && formData.year;
-
   useEffect(() => {
-    async function fetchVehicles() {
-      const data = await vehiclesService.getAll();
-      const vehicleList = data.Results.map((vehicle: Vehicle) => ({
-        MakeId: vehicle.MakeId,
-        MakeName: vehicle.MakeName,
-      }));
+    async function fetchData() {
+      const vehicleList = await loadData();
       setVehicles(vehicleList);
     }
-    fetchVehicles();
+    if (!vehicles.length) {
+      fetchData();
+    }
   }, []);
 
   return (
     <div className="flex gap-4">
       <select
-        name="makeId"
         value={formData.makeId}
         onChange={handleInput}
+        name="makeId"
         className="border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
       >
         <option value="" disabled>

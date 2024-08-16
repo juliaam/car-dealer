@@ -2,10 +2,7 @@
 
 import { Suspense } from "react";
 import { VehicleSelects } from "@/components/VehicleSelectsPage";
-
-function Loading() {
-  return <h1 className="text-5xl">🌀 Loading...</h1>;
-}
+import { Loading } from "@/components/Loading";
 
 export default function Home() {
   return (
