@@ -3,7 +3,6 @@
 import { vehiclesService } from "@/services/vehicles";
 import { getYears } from "@/utils/getYearsVehicles";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState, useEffect, EventHandler } from "react";
 
 interface Vehicle {
   MakeName: string;
@@ -20,46 +19,30 @@ const loadData = async () => {
   return vehicleList;
 };
 
-export function VehicleSelects() {
-  const [formData, setFormData] = useState({ makeId: "", year: "" });
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const isFormValid = formData.makeId && formData.year;
-  const years = getYears();
+export async function VehicleSelects() {
   const router = useRouter();
+  const vehicles = await loadData();
+  const years = getYears();
 
-  const handleInput = (e: ChangeEvent<HTMLSelectElement>) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
 
-    setFormData((prevState) => ({
-      ...prevState,
-      [fieldName]: fieldValue,
-    }));
-  };
+    const formData = new FormData(event.currentTarget);
+    const makeId = formData.get("makeId");
+    const year = formData.get("year");
 
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    router.push(`/result/${formData.makeId}/${formData.year}`);
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      const vehicleList = await loadData();
-      setVehicles(vehicleList);
+    if (makeId && year) {
+      router.push(`/result/${makeId}/${year}`);
     }
-    if (!vehicles.length) {
-      fetchData();
-    }
-  }, [vehicles.length]);
+  };
 
   return (
-    <div className="flex gap-4">
+    <form onSubmit={handleSubmit} className="flex gap-4">
       <select
-        value={formData.makeId}
-        onChange={handleInput}
         name="makeId"
         className="border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
       >
-        <option value="" disabled>
+        <option value="" disabled selected>
           Select Vehicle
         </option>
         {vehicles.map((vehicle: Vehicle) => (
@@ -70,11 +53,9 @@ export function VehicleSelects() {
       </select>
       <select
         name="year"
-        value={formData.year}
-        onChange={handleInput}
         className="border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
       >
-        <option value="" disabled>
+        <option value="" disabled selected>
           Select Year
         </option>
         {years.map((year) => (
@@ -84,16 +65,11 @@ export function VehicleSelects() {
         ))}
       </select>
       <button
-        onClick={handleSubmit}
-        className={`border px-4 py-2 rounded-md focus:outline-none focus:ring-2 ${
-          isFormValid
-            ? "border-white bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-600"
-            : "border-gray-400 bg-gray-600 text-gray-400 cursor-normal"
-        }`}
-        disabled={!isFormValid}
+        type="submit"
+        className="border px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
       >
         Next
       </button>
-    </div>
+    </form>
   );
 }
