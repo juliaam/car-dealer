@@ -1,6 +1,7 @@
 "use client";
 
 import { vehiclesService } from "@/services/vehicles";
+import { getYears } from "@/utils/getYearsVehicles";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState, useEffect, EventHandler } from "react";
 
@@ -8,18 +9,6 @@ interface Vehicle {
   MakeName: string;
   MakeId: number;
 }
-
-export const getYears = (): number[] => {
-  const startYear = 2015;
-  const currentYear = new Date().getFullYear();
-  const years = [];
-
-  for (let year = startYear; year <= currentYear; year++) {
-    years.push(year);
-  }
-
-  return years;
-};
 
 const loadData = async () => {
   const data = await vehiclesService.getAll();

@@ -4,14 +4,10 @@ import { vehiclesService } from "@/services/vehicles";
 import VehicleModels from "@/components/VehicleModels";
 
 export const generateStaticParams = async () => {
-  const data = await fetch(
-    "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
-  );
-  const somt = await data.json();
+  const data = await vehiclesService.getAll();
 
-  return somt.Results.map((vehicle: { MakeId: string; year: string }) => ({
+  return data.Results.map((vehicle) => ({
     id: vehicle.MakeId,
-    year: vehicle.year,
   }));
 };
 
