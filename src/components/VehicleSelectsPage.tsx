@@ -40,7 +40,7 @@ export async function VehicleSelects() {
     <form onSubmit={handleSubmit} className="flex gap-4">
       <select
         name="makeId"
-        className="border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
+        className="cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
       >
         <option value="" disabled selected>
           Select Vehicle
@@ -53,7 +53,7 @@ export async function VehicleSelects() {
       </select>
       <select
         name="year"
-        className="border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
+        className="cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
       >
         <option value="" disabled selected>
           Select Year

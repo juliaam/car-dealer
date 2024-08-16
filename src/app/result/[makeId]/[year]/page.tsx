@@ -24,9 +24,7 @@ export default async function ResultPage({
 
   return (
     <div className="min-h-screen p-4">
-      <Suspense fallback={<Loading />}>
-        <VehicleModels vehicles={vehicles} />
-      </Suspense>
+      <VehicleModels vehicles={vehicles} />
     </div>
   );
 }
