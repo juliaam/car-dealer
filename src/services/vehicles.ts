@@ -1,22 +1,12 @@
-export interface VehicleResponse {
-  Make_ID: number;
-  Make_Name: string;
-  Model_ID: number;
-  Model_Name: string;
-}
-
-interface Response {
-  count: number;
-  Message: string;
-  SearchCriteria: string;
-  Results: VehicleResponse[];
-}
+import {
+  getAllByMakeIdAndYearResponse,
+  getAllResponse,
+} from "./vehicles.types";
 
 export const vehiclesService = {
-  getAll: async () => {
+  getAll: async (): Promise<getAllResponse> => {
     const data = await fetch(
-      "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json",
-      { cache: "force-cache" }
+      "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
     );
     return await data.json();
   },
@@ -26,7 +16,7 @@ export const vehiclesService = {
   }: {
     makeId: string;
     year: string;
-  }): Promise<Response> => {
+  }): Promise<getAllByMakeIdAndYearResponse> => {
     const response = await fetch(
       `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${makeId}/modelyear/${year}?format=json`
     );

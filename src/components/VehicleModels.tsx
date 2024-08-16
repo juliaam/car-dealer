@@ -1,9 +1,9 @@
 "use client";
 
-import { VehicleResponse } from "@/services/vehicles";
+import { VehicleByModelAndYear } from "@/services/vehicles.types";
 
 interface VehicleModelsProps {
-  vehicles: VehicleResponse[];
+  vehicles: VehicleByModelAndYear[];
 }
 
 export default function VehicleModels({ vehicles }: VehicleModelsProps) {

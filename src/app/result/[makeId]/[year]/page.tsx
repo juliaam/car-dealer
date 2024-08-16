@@ -7,9 +7,9 @@ export const generateStaticParams = async () => {
   const data = await fetch(
     "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
   );
-  const res = await data.json();
+  const somt = await data.json();
 
-  return res.Results.map((vehicle: { MakeId: string; year: string }) => ({
+  return somt.Results.map((vehicle: { MakeId: string; year: string }) => ({
     id: vehicle.MakeId,
     year: vehicle.year,
   }));

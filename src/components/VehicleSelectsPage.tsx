@@ -1,7 +1,8 @@
 "use client";
 
 import { vehiclesService } from "@/services/vehicles";
-import { ChangeEvent, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useState, useEffect, EventHandler } from "react";
 
 interface Vehicle {
   MakeName: string;
@@ -35,6 +36,7 @@ export function VehicleSelects() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const isFormValid = formData.makeId && formData.year;
   const years = getYears();
+  const router = useRouter();
 
   const handleInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const fieldName = e.target.name;
@@ -46,8 +48,8 @@ export function VehicleSelects() {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log(formData);
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    router.push(`/result/${formData.makeId}/${formData.year}`);
   };
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export function VehicleSelects() {
     if (!vehicles.length) {
       fetchData();
     }
-  }, []);
+  }, [vehicles.length]);
 
   return (
     <div className="flex gap-4">
