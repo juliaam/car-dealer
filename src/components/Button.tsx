@@ -6,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = (
-  { children, disabled, ...props }: ButtonProps,
+  { children, disabled, className, ...props }: ButtonProps,
   ref: Ref<HTMLButtonElement>
 ) => {
   const baseStyles =
@@ -19,7 +19,11 @@ const Button = (
       {...props}
       ref={ref}
       disabled={disabled}
-      className={twMerge(baseStyles, disabled ? disabledStyles : enabledStyles)}
+      className={twMerge(
+        baseStyles,
+        className,
+        disabled ? disabledStyles : enabledStyles
+      )}
     >
       {children}
     </button>

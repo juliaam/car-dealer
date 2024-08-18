@@ -1,12 +1,8 @@
-"use client";
-
-import { vehiclesService } from "@/services/vehicles";
-import { getYears } from "@/utils/getYearsVehicles";
-import { useRouter } from "next/navigation";
+import React from "react";
 import { Select } from "./Select";
 import { Button } from "./Button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Vehicle {
   MakeName: string;
@@ -18,36 +14,20 @@ interface FormValues {
   year: string;
 }
 
-export function VehicleSelects() {
+interface VehicleSelectsProps {
+  vehicles: Vehicle[];
+  years: number[];
+}
+
+export function VehicleSelects({ vehicles, years }: VehicleSelectsProps) {
   const { register, handleSubmit, watch } = useForm<FormValues>();
   const router = useRouter();
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const years = getYears();
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
   const makeId = watch("makeId");
   const year = watch("year");
-
-  useEffect(() => {
-    setIsButtonDisabled(!makeId || !year);
-  }, [makeId, year]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await vehiclesService.getAll();
-      const vehicleList = data.Results.map((vehicle: Vehicle) => ({
-        MakeId: vehicle.MakeId,
-        MakeName: vehicle.MakeName,
-      }));
-      setVehicles(vehicleList);
-    };
-
-    loadData();
-  }, []);
+  const isButtonDisabled = !makeId || !year;
 
   const goToResult: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
     router.push(`/result/${data.makeId}/${data.year}`);
   };
 

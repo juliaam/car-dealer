@@ -16,8 +16,10 @@ export default function VehicleModels({ vehicles }: any) {
   const existsVehicles = vehicles.length > 0;
 
   return (
-    <div className="p-8">
-      <Button onClick={redirectHome}>Back</Button>
+    <div className="p-8 ">
+      <Button className="mb-4" onClick={redirectHome}>
+        Back
+      </Button>
       {existsVehicles ? (
         <>
           <h1 className="text-2xl font-semibold mb-4">Vehicle Models: </h1>
