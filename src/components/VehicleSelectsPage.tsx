@@ -3,46 +3,59 @@
 import { vehiclesService } from "@/services/vehicles";
 import { getYears } from "@/utils/getYearsVehicles";
 import { useRouter } from "next/navigation";
+import { Select } from "./Select";
+import { Button } from "./Button";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 interface Vehicle {
   MakeName: string;
   MakeId: number;
 }
 
-const loadData = async () => {
-  const data = await vehiclesService.getAll();
-  const vehicleList = data.Results.map((vehicle: Vehicle) => ({
-    MakeId: vehicle.MakeId,
-    MakeName: vehicle.MakeName,
-  }));
+interface FormValues {
+  makeId: string;
+  year: string;
+}
 
-  return vehicleList;
-};
-
-export async function VehicleSelects() {
+export function VehicleSelects() {
+  const { register, handleSubmit, watch } = useForm<FormValues>();
   const router = useRouter();
-  const vehicles = await loadData();
+
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const years = getYears();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
+  const makeId = watch("makeId");
+  const year = watch("year");
 
-    const formData = new FormData(event.currentTarget);
-    const makeId = formData.get("makeId");
-    const year = formData.get("year");
+  useEffect(() => {
+    setIsButtonDisabled(!makeId || !year);
+    console.log(isButtonDisabled);
+  }, [makeId, year]);
 
-    if (makeId && year) {
-      router.push(`/result/${makeId}/${year}`);
-    }
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await vehiclesService.getAll();
+      const vehicleList = data.Results.map((vehicle: Vehicle) => ({
+        MakeId: vehicle.MakeId,
+        MakeName: vehicle.MakeName,
+      }));
+      setVehicles(vehicleList);
+    };
+
+    loadData();
+  }, []);
+
+  const goToResult: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
+    router.push(`/result/${data.makeId}/${data.year}`);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-4">
-      <select
-        name="makeId"
-        className="cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
-      >
-        <option value="" disabled selected>
+    <form onSubmit={handleSubmit(goToResult)} className="flex gap-4">
+      <Select {...register("makeId")} defaultValue="">
+        <option value="" disabled>
           Select Vehicle
         </option>
         {vehicles.map((vehicle: Vehicle) => (
@@ -50,12 +63,9 @@ export async function VehicleSelects() {
             {vehicle.MakeName}
           </option>
         ))}
-      </select>
-      <select
-        name="year"
-        className="cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
-      >
-        <option value="" disabled selected>
+      </Select>
+      <Select {...register("year")} defaultValue="">
+        <option value="" disabled>
           Select Year
         </option>
         {years.map((year) => (
@@ -63,13 +73,10 @@ export async function VehicleSelects() {
             {year}
           </option>
         ))}
-      </select>
-      <button
-        type="submit"
-        className="border px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-      >
+      </Select>
+      <Button type="submit" disabled={isButtonDisabled}>
         Next
-      </button>
+      </Button>
     </form>
   );
 }

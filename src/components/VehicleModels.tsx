@@ -1,14 +1,13 @@
 "use client";
 
-import { VehicleByModelAndYear } from "@/services/vehicles.types";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "./Button";
 
-interface VehicleModelsProps {
-  vehicles: VehicleByModelAndYear[];
-}
-
-export default function VehicleModels({ vehicles }: VehicleModelsProps) {
+export default function VehicleModels({ vehicles }: any) {
   const router = useRouter();
+
+  useEffect(() => {}, []);
 
   const redirectHome = () => {
     router.push("/");
@@ -18,17 +17,12 @@ export default function VehicleModels({ vehicles }: VehicleModelsProps) {
 
   return (
     <div className="p-8">
-      <button
-        className="border-white bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-600 border px-4 py-2 rounded-md focus:outline-none focus:ring-2 mb-4"
-        onClick={redirectHome}
-      >
-        Back
-      </button>
+      <Button onClick={redirectHome}>Back</Button>
       {existsVehicles ? (
         <>
           <h1 className="text-2xl font-semibold mb-4">Vehicle Models: </h1>
           <ul className="grid grid-cols-4 gap-4">
-            {vehicles.map((model) => (
+            {vehicles.map((model: any) => (
               <li
                 key={model.Model_ID}
                 className="p-2 bg-gray-800 text-white rounded-md"
