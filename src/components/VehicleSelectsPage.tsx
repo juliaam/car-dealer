@@ -31,7 +31,6 @@ export function VehicleSelects() {
 
   useEffect(() => {
     setIsButtonDisabled(!makeId || !year);
-    console.log(isButtonDisabled);
   }, [makeId, year]);
 
   useEffect(() => {
