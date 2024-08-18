@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { VehicleSelects } from "@/components/VehicleSelectsPage";
 import { vehiclesService } from "@/services/vehicles";
 import { getYears } from "@/utils/getYearsVehicles";
+import { ClipLoader } from "react-spinners";
 
 interface Vehicle {
   MakeName: string;
@@ -42,7 +43,7 @@ export const VehicleSelectsWithSuspense = () => {
   }, []);
 
   if (!data) {
-    return <div>Loading...</div>; // You can use a spinner or other loading indicator here
+    return <ClipLoader size={40} color={"#3498db"} />;
   }
 
   return <VehicleSelectsWithData vehicles={data.vehicles} years={data.years} />;

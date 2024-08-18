@@ -32,7 +32,10 @@ export function VehicleSelects({ vehicles, years }: VehicleSelectsProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(goToResult)} className="flex gap-4">
+    <form
+      onSubmit={handleSubmit(goToResult)}
+      className="flex gap-4 flex-col sm:flex-row"
+    >
       <Select {...register("makeId")} defaultValue="">
         <option value="" disabled>
           Select Vehicle

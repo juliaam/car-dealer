@@ -13,12 +13,12 @@ const Select = (
       name={name}
       ref={ref}
       {...props}
-      className="cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
+      className="w-full max-w-xs cursor-pointer border border-gray-300 bg-gray-800 text-white px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
     >
       {children}
     </select>
   );
 };
 
-const ForwardedButton = forwardRef(Select);
-export { ForwardedButton as Select };
+const ForwardedSelect = forwardRef(Select);
+export { ForwardedSelect as Select };
